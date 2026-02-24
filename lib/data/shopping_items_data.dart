@@ -5,7 +5,7 @@ import 'package:shopping_list/models/shopping_item.dart';
 final shoppingList = [
   ShoppingItem(
     id: 'a',
-    name: 'Mark',
+    name: 'Milk',
     quantity: 10,
     category: categories[Categories.dairy]!,
   ),
