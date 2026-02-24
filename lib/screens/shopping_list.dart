@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shopping_list/providers/shopping_list_provider.dart';
 import 'package:shopping_list/theme.dart';
 
-class ShoppingList extends StatelessWidget {
+import '../widgets/shopping_list_item.dart';
+
+class ShoppingList extends ConsumerWidget {
   const ShoppingList({super.key});
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final listProvider = ref.watch(shoppingListProvider);
     return SafeArea(
       minimum: EdgeInsets.only(top: 30),
       child: Scaffold(
@@ -16,8 +21,8 @@ class ShoppingList extends StatelessWidget {
         ),
         body: Container(
           padding: EdgeInsets.all(8),
-          width: MediaQuery.widthOf(context),
-          height: MediaQuery.heightOf(context),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [darkPrimaryColor, lightPrimaryColor],
@@ -25,16 +30,13 @@ class ShoppingList extends StatelessWidget {
               end: Alignment.bottomRight,
             ),
           ),
-          child: ListView.builder(
+          child: ListView.separated(
+            separatorBuilder: (context, index) => const SizedBox(height: 4),
             padding: EdgeInsets.all(20),
-            itemBuilder: (context, int size) {
-              //TODO List Item Widget
-              return Text(
-                "Placeholder",
-                style: Theme.of(context).textTheme.bodyLarge,
-              );
+            itemBuilder: (context, int index) {
+              return ShoppingListItem(shoppingItem: listProvider[index]);
             },
-            itemCount: 40,
+            itemCount: listProvider.length,
           ),
         ),
         floatingActionButton: FloatingActionButton(

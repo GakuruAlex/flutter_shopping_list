@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping_list/screens/shopping_list.dart';
 import 'package:shopping_list/theme.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
