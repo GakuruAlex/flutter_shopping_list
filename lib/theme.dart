@@ -18,6 +18,11 @@ final themeData = ThemeData(
       fontStyle: FontStyle.normal,
       color: primaryTextColor,
     ),
+    bodyMedium: GoogleFonts.acme(
+      fontSize: 18,
+      fontStyle: FontStyle.normal,
+      color: primaryTextColor,
+    ),
   ),
   scaffoldBackgroundColor: darkPrimaryColor,
   appBarTheme: AppBarTheme(backgroundColor: lightPrimaryColor),
