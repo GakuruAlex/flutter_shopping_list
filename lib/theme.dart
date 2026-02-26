@@ -24,6 +24,16 @@ final themeData = ThemeData(
       color: primaryTextColor,
     ),
   ),
+  bottomSheetTheme: BottomSheetThemeData(
+    backgroundColor: lightPrimaryColor,
+    elevation: 20,
+  ),
+  dropdownMenuTheme: DropdownMenuThemeData(
+    menuStyle: MenuStyle(
+      backgroundColor: WidgetStatePropertyAll(darkPrimaryColor),
+    ),
+  ),
+
   scaffoldBackgroundColor: darkPrimaryColor,
   appBarTheme: AppBarTheme(backgroundColor: lightPrimaryColor),
   floatingActionButtonTheme: FloatingActionButtonThemeData(
