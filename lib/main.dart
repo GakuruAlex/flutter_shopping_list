@@ -4,7 +4,7 @@ import 'package:shopping_list/screens/shopping_list.dart';
 import 'package:shopping_list/theme.dart';
 
 void main() {
-  runApp(const ProviderScope(child: const MyApp()));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -14,9 +14,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Shopping List',
       theme: themeData,
       home: Container(
+        margin: EdgeInsetsGeometry.only(top: 10),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [darkPrimaryColor, lightPrimaryColor],

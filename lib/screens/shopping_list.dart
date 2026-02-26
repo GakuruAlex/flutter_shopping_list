@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping_list/providers/shopping_list_provider.dart';
 import 'package:shopping_list/theme.dart';
+import 'package:shopping_list/widgets/new_item.dart';
 
 import '../widgets/shopping_list_item.dart';
 
@@ -40,7 +41,14 @@ class ShoppingList extends ConsumerWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return SizedBox(width: double.infinity - 20, child: NewItem());
+              },
+            );
+          },
           child: Icon(Icons.add),
         ),
       ),
