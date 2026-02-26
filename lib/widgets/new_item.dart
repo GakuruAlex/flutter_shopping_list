@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shopping_list/data/categories.dart';
+import 'package:shopping_list/providers/shopping_list_provider.dart';
 
 import '../models/category.dart';
 
@@ -14,6 +16,10 @@ class NewItem extends ConsumerStatefulWidget {
 
 class _NewItemState extends ConsumerState<NewItem> {
   final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _quantityController = TextEditingController();
+  Categories _categoryController = Categories.carbs;
+
   String? inputValidator(String? value, String title) {
     if (value == null || value.isEmpty) {
       return 'Please enter $title';
@@ -22,7 +28,15 @@ class _NewItemState extends ConsumerState<NewItem> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
+    _quantityController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final shoppingListNotifier = ref.read(shoppingListProvider.notifier);
     return Form(
       key: _formKey,
 
@@ -39,6 +53,7 @@ class _NewItemState extends ConsumerState<NewItem> {
             children: [
               Expanded(
                 child: TextFormField(
+                  controller: _nameController,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(label: Text('Name')),
                   validator: (value) {
@@ -49,6 +64,7 @@ class _NewItemState extends ConsumerState<NewItem> {
               SizedBox(width: 20),
               Expanded(
                 child: TextFormField(
+                  controller: _quantityController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(label: Text('Quantity')),
                   validator: (value) {
@@ -61,7 +77,8 @@ class _NewItemState extends ConsumerState<NewItem> {
           SizedBox(height: 20),
           DropdownMenu(
             label: Text('Category'),
-            initialSelection: Categories.carbs,
+            onSelected: (value) => _categoryController = value!,
+            initialSelection: _categoryController,
             dropdownMenuEntries: Categories.values.map((category) {
               return DropdownMenuEntry<Categories>(
                 value: category,
@@ -75,7 +92,17 @@ class _NewItemState extends ConsumerState<NewItem> {
             padding: EdgeInsetsGeometry.all(12),
             child: FloatingActionButton.extended(
               label: Text('Submit'),
-              onPressed: () {},
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  shoppingListNotifier.addNewItem(
+                    name: _nameController.text.trim(),
+                    quantity: double.parse(_quantityController.text.trim()),
+                    category: categories[_categoryController]!,
+                  );
+                  _formKey.currentState!.reset();
+                  Navigator.pop(context);
+                }
+              },
               icon: Icon(Icons.add),
             ),
           ),
