@@ -42,12 +42,9 @@ class ShoppingList extends ConsumerWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return SizedBox(width: double.infinity - 20, child: NewItem());
-              },
-            );
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (context) => NewItem()));
           },
           child: Icon(Icons.add),
         ),

@@ -18,7 +18,7 @@ class _NewItemState extends ConsumerState<NewItem> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _quantityController = TextEditingController();
-  Categories _categoryController = Categories.carbs;
+  Category _categoryController = categories[Categories.carbs]!;
 
   String? inputValidator(String? value, String title) {
     if (value == null || value.isEmpty) {
@@ -37,76 +37,92 @@ class _NewItemState extends ConsumerState<NewItem> {
   @override
   Widget build(BuildContext context) {
     final shoppingListNotifier = ref.read(shoppingListProvider.notifier);
-    return Form(
-      key: _formKey,
+    return Scaffold(
+      appBar: AppBar(title: Text("Add New Item")),
+      body: Form(
+        key: _formKey,
 
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
 
-            children: [
-              Expanded(
-                child: TextFormField(
-                  controller: _nameController,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(label: Text('Name')),
-                  validator: (value) {
-                    return inputValidator(value, 'Name');
-                  },
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _nameController,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(label: Text('Name')),
+                    validator: (value) {
+                      return inputValidator(value, 'Name');
+                    },
+                  ),
                 ),
-              ),
-              SizedBox(width: 20),
-              Expanded(
-                child: TextFormField(
-                  controller: _quantityController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(label: Text('Quantity')),
-                  validator: (value) {
-                    return inputValidator(value, 'Quantity');
-                  },
+                SizedBox(width: 20),
+                Expanded(
+                  child: TextFormField(
+                    controller: _quantityController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(label: Text('Quantity')),
+                    validator: (value) {
+                      return inputValidator(value, 'Quantity');
+                    },
+                  ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          DropdownMenu(
-            label: Text('Category'),
-            onSelected: (value) => _categoryController = value!,
-            initialSelection: _categoryController,
-            dropdownMenuEntries: Categories.values.map((category) {
-              return DropdownMenuEntry<Categories>(
-                value: category,
-                label: category.name,
-              );
-            }).toList(),
-          ),
-
-          Spacer(),
-          Padding(
-            padding: EdgeInsetsGeometry.all(12),
-            child: FloatingActionButton.extended(
-              label: Text('Submit'),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  shoppingListNotifier.addNewItem(
-                    name: _nameController.text.trim(),
-                    quantity: double.parse(_quantityController.text.trim()),
-                    category: categories[_categoryController]!,
-                  );
-                  _formKey.currentState!.reset();
-                  Navigator.pop(context);
-                }
-              },
-              icon: Icon(Icons.add),
+              ],
             ),
-          ),
-        ],
+            SizedBox(height: 20),
+            DropdownButtonFormField(
+              initialValue: _categoryController,
+              onChanged: (value) {
+                _categoryController = value!;
+              },
+
+              items: [
+                for (final category in categories.entries)
+                  DropdownMenuItem(
+                    value: category.value,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 16,
+                          height: 16,
+                          color: category.value.color,
+                        ),
+                        SizedBox(width: 8),
+                        Text(category.value.title),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+
+            Spacer(),
+            Padding(
+              padding: EdgeInsetsGeometry.all(12),
+              child: FloatingActionButton.extended(
+                label: Text('Submit'),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    shoppingListNotifier.addNewItem(
+                      name: _nameController.text.trim(),
+                      quantity: double.parse(_quantityController.text.trim()),
+                      category: _categoryController,
+                    );
+                    _formKey.currentState!.reset();
+                    Navigator.pop(context);
+                  }
+                },
+                icon: Icon(Icons.add),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
