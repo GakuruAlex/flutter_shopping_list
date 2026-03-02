@@ -21,10 +21,25 @@ class _NewItemState extends ConsumerState<NewItem> {
   Category _categoryController = categories[Categories.carbs]!;
 
   String? inputValidator(String? value, String title) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter $title';
+    if (title == 'Name') {
+      if (value == null || value.isEmpty) {
+        return 'Please enter $title';
+      } else if (value.length < 2) {
+        return 'Please enter $title greater than 2';
+      } else if (value.length > 50) {
+        return 'Please enter a $title with characters less than 50';
+      }
+      return null;
+    } else {
+      if (value == null || value.isEmpty) {
+        return 'Please enter $title';
+      } else if (int.tryParse(value) == null) {
+        return 'Please enter a $title that is a number';
+      } else if (int.tryParse(value)! < 0) {
+        return 'Please enter a $title greater than 0';
+      }
+      return null;
     }
-    return null;
   }
 
   @override
@@ -102,7 +117,7 @@ class _NewItemState extends ConsumerState<NewItem> {
               ],
             ),
 
-            Spacer(),
+            SizedBox(height: 20),
             Padding(
               padding: EdgeInsetsGeometry.all(12),
               child: FloatingActionButton.extended(
