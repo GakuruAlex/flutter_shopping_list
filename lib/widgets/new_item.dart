@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping_list/data/categories.dart';
-import 'package:shopping_list/providers/shopping_list_provider.dart';
+import 'package:shopping_list/providers/api_provider.dart';
 
 import '../models/category.dart';
 
@@ -51,7 +51,7 @@ class _NewItemState extends ConsumerState<NewItem> {
 
   @override
   Widget build(BuildContext context) {
-    final shoppingListNotifier = ref.read(shoppingListProvider.notifier);
+    final shoppingListNotifier = ref.read(apiServiceProvider.notifier);
     return Scaffold(
       appBar: AppBar(title: Text("Add New Item")),
       body: Form(
@@ -124,11 +124,11 @@ class _NewItemState extends ConsumerState<NewItem> {
                 label: Text('Submit'),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    shoppingListNotifier.addNewItem(
-                      name: _nameController.text.trim(),
-                      quantity: double.parse(_quantityController.text.trim()),
-                      category: _categoryController,
-                    );
+                    shoppingListNotifier.newItem({
+                      'name': _nameController.text.trim(),
+                      'quantity': _quantityController.text.trim(),
+                      'category': _categoryController.title,
+                    });
                     _formKey.currentState!.reset();
                     Navigator.pop(context);
                   }
