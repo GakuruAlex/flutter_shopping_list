@@ -13,7 +13,7 @@ final shoppingList = [
     id: 'b',
     name: 'Bananas',
     quantity: 24,
-    category: categories[Categories.fruit]!,
+    category: categories[Categories.fruits]!,
   ),
   ShoppingItem(
     id: 'c',

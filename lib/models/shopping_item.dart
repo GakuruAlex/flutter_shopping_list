@@ -12,8 +12,9 @@ class ShoppingItem {
   factory ShoppingItem.fromJson(Map<String, dynamic> data) => ShoppingItem(
     id: data['id'],
     name: data['name'],
-    quantity: data['quantity'],
-    category: categories[data['category']]!,
+    quantity: double.parse(data['quantity']),
+    category:
+        categories[Categories.values.byName(data['category'].toLowerCase())]!,
   );
   final String id;
   final String name;

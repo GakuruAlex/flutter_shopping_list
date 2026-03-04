@@ -51,7 +51,7 @@ class _NewItemState extends ConsumerState<NewItem> {
 
   @override
   Widget build(BuildContext context) {
-    final shoppingListNotifier = ref.read(apiServiceProvider.notifier);
+    final shoppingListNotifier = ref.read(apiPostServiceProvider.notifier);
     return Scaffold(
       appBar: AppBar(title: Text("Add New Item")),
       body: Form(
